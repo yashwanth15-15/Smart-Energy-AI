@@ -108,5 +108,5 @@ def health_check():
     return {
         "status": "ok",
         "service": "Smart Energy AI Backend",
-        "model_loaded": app.state.model is not None
+        "model_loaded": getattr(app.state, "model", None) is not None
     }

@@ -31,8 +31,8 @@ class ApiClient {
         if (idToken != null) {
           headers['Authorization'] = 'Bearer $idToken';
         }
-      } catch (e) {
-        print('Error getting ID token: $e');
+      } catch (_) {
+        // Ignore error
       }
     }
     
