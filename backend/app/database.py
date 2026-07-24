@@ -2,9 +2,19 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from app.config import settings
 
-# Setup SQLAlchemy engine (SQLite requires check_same_thread=False)
+# Fix Heroku/Render postgres:// URI issue
+db_url = settings.database_url
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+# Configure args based on the database type
+connect_args = {}
+if db_url.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+
+# Setup SQLAlchemy engine
 engine = create_engine(
-    settings.database_url, connect_args={"check_same_thread": False}
+    db_url, connect_args=connect_args
 )
 
 # Create a sessionmaker for dependency injection

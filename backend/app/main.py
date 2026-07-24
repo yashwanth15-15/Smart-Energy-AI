@@ -14,10 +14,13 @@ from app.database import engine, SessionLocal
 from app.models import Base, Building
 from app.config import settings
 
+from app.database import Base, engine
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Auto-create tables on startup
+    # Initialize DB tables
     Base.metadata.create_all(bind=engine)
+    
     
     # Seed the Buildings table if empty
     db = SessionLocal()

@@ -11,3 +11,4 @@ python-dotenv
 pydantic-settings
 slowapi
 cachetools
+psycopg2-binary
