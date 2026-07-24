@@ -32,7 +32,3 @@ backend/smart_energy.db
 # Windows
 Thumbs.db
 
-# Machine Learning Models
-backend/model.pkl
-backend/*.pkl
-backend/*.joblib
