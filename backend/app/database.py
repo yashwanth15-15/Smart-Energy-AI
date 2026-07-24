@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-from app.config import DATABASE_URL
+from app.config import settings
 
 # Setup SQLAlchemy engine (SQLite requires check_same_thread=False)
 engine = create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
+    settings.database_url, connect_args={"check_same_thread": False}
 )
 
 # Create a sessionmaker for dependency injection

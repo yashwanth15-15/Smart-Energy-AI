@@ -12,7 +12,7 @@ import 'package:frontend/models/timeline_model.dart';
 class DashboardRepository {
   final String baseUrl = const String.fromEnvironment(
     'API_URL',
-    defaultValue: 'http://127.0.0.1:8000',
+    defaultValue: 'http://localhost:8000',
   );
 
   Future<DashboardData> fetchDashboard() async {

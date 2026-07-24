@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 import '../features/home/models/dashboard_model.dart';
 import '../features/home/models/prediction_model.dart';
 
@@ -8,7 +7,7 @@ class DashboardService {
   String get baseUrl {
     return const String.fromEnvironment(
       'API_URL',
-      defaultValue: 'http://127.0.0.1:8000',
+      defaultValue: 'http://localhost:8000',
     );
   }
 
