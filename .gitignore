@@ -1,7 +1,10 @@
 # Python
 backend/.venv/
 backend/__pycache__/
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
 
 # Flutter
 .dart_tool/
@@ -15,20 +18,20 @@ build/
 # IntelliJ
 .idea/
 
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
 # macOS
 .DS_Store
 
 # Windows
 Thumbs.db
 
-# Environment
-.env
-.env.*
-
-# Python cache
-__pycache__/
-*.pyo
-*.pyd
-
-# Logs
-*.log
+# Machine Learning Models
+backend/model.pkl
+backend/*.pkl
+backend/*.joblib
