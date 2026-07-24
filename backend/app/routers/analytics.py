@@ -6,6 +6,9 @@ from app.models import Building, EnergyReading
 from app.schemas.analytics import AnalyticsResponse
 
 from app.services.scenario_manager import get_current_scenario
+from cachetools import cached, TTLCache
+
+analytics_cache = TTLCache(maxsize=100, ttl=60)
 
 router = APIRouter(
     prefix="/analytics",
@@ -13,6 +16,7 @@ router = APIRouter(
 )
 
 @router.get("", response_model=AnalyticsResponse)
+@cached(cache=analytics_cache)
 def get_analytics():
     db: Session = SessionLocal()
     try:

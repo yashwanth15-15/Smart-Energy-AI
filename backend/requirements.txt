@@ -9,3 +9,5 @@ xgboost
 gunicorn
 python-dotenv
 pydantic-settings
+slowapi
+cachetools

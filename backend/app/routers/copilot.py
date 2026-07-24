@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 import random
 from typing import List
+from app.core.rate_limit import limiter
 
 router = APIRouter(
     prefix="/copilot",
@@ -21,7 +22,8 @@ class ChatResponse(BaseModel):
     suggested_actions: List[str] = []
 
 @router.post("/chat", response_model=ChatResponse)
-def copilot_chat(request: ChatRequest):
+@limiter.limit("10/minute")
+def copilot_chat(request_obj: Request, request: ChatRequest):
     if not request.messages:
         raise HTTPException(status_code=400, detail="Messages cannot be empty")
         
