@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Depends
+from app.core.auth import get_current_user
 from pydantic import BaseModel
 import random
 from typing import List
@@ -21,7 +22,7 @@ class ChatResponse(BaseModel):
     response: str
     suggested_actions: List[str] = []
 
-@router.post("/chat", response_model=ChatResponse)
+@router.post("/chat", response_model=ChatResponse, dependencies=[Depends(get_current_user)])
 @limiter.limit("10/minute")
 def copilot_chat(request_obj: Request, request: ChatRequest):
     if not request.messages:

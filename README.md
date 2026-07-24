@@ -15,9 +15,11 @@ Smart Energy AI is a full-stack platform designed to predict and monitor energy 
 
 ## Features
 
-- **Live Dashboard**: View current energy load and active alerts.
-- **ML Predictions**: 24-hour predictive load curve based on XGBoost inference.
-- **Analytics**: Historical comparisons and scenario modeling.
+- **Material 3 UI**: Responsive interface with dark/light mode toggling.
+- **AI Campus Copilot**: Conversational AI assistant with real-time operational context.
+- **Predictive Analytics**: Forecasting energy usage using XGBoost.
+- **Interactive Dashboards**: Visualizing load, cost, and anomalies in real-time.
+- **Alert Management**: Rule-based smart anomaly detection.
 
 ## Screenshots
 

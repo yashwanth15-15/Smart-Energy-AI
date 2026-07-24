@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // Screens
 import 'package:frontend/screens/dashboard_screen.dart';
@@ -17,6 +18,7 @@ import 'package:frontend/screens/about_screen.dart';
 import 'package:frontend/screens/settings_screen.dart';
 import 'package:frontend/screens/profile_screen.dart';
 import 'package:frontend/screens/notifications_screen.dart';
+import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/core/theme/theme_provider.dart';
 import 'package:frontend/shared/widgets/responsive_shell.dart';
@@ -36,42 +38,60 @@ final List<NavItem> navItems = const [
   NavItem('Analytics', Icons.analytics, 'analytics'),
 ];
 
-final appRouter = GoRouter(
-  initialLocation: '/dashboard',
-  routes: [
-    ShellRoute(
-      builder: (context, state, child) {
-        final String location = state.uri.toString();
-        
-        return Consumer(
-          builder: (context, ref, _) {
-            return ResponsiveShell(
-              currentLocation: location,
-              onThemeToggle: () => ref.read(themeProvider.notifier).toggleTheme(),
-              child: child,
-            );
-          },
-        );
-      },
-      routes: [
-        _fadeRoute('/dashboard', 'dashboard', const DashboardScreen()),
-        _fadeRoute('/copilot', 'copilot', const AiCopilotScreen()),
-        _fadeRoute('/buildings', 'buildings', const BuildingsScreen()),
-        _fadeRoute('/analytics', 'analytics', const AnalyticsScreen()),
-        _fadeRoute('/insights', 'insights', const InsightsScreen()),
-        _fadeRoute('/alerts', 'alerts', const AlertsScreen()),
-        _fadeRoute('/prediction', 'prediction', const PredictionScreen()),
-        _fadeRoute('/sustainability', 'sustainability', const SustainabilityScreen()),
-        _fadeRoute('/map', 'map', const MapScreen()),
-        _fadeRoute('/reports', 'reports', const ReportsScreen()),
-        _fadeRoute('/about', 'about', const AboutScreen()),
-        _fadeRoute('/settings', 'settings', const SettingsScreen()),
-        _fadeRoute('/profile', 'profile', const ProfileScreen()),
-        _fadeRoute('/notifications', 'notifications', const NotificationsScreen()),
-      ],
-    ),
-  ],
-);
+// GoRouter provider that listens to auth state changes
+final routerProvider = Provider<GoRouter>((ref) {
+  final authState = ref.watch(authStateProvider);
+
+  return GoRouter(
+    initialLocation: '/dashboard',
+    redirect: (context, state) {
+      final isLoggedIn = authState.valueOrNull != null;
+      final isLoggingIn = state.uri.toString() == '/login';
+
+      if (!isLoggedIn && !isLoggingIn) return '/login';
+      if (isLoggedIn && isLoggingIn) return '/dashboard';
+      return null;
+    },
+    routes: [
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      ShellRoute(
+        builder: (context, state, child) {
+          final String location = state.uri.toString();
+          
+          return Consumer(
+            builder: (context, ref, _) {
+              return ResponsiveShell(
+                currentLocation: location,
+                onThemeToggle: () => ref.read(themeProvider.notifier).toggleTheme(),
+                child: child,
+              );
+            },
+          );
+        },
+        routes: [
+          _fadeRoute('/dashboard', 'dashboard', const DashboardScreen()),
+          _fadeRoute('/copilot', 'copilot', const AiCopilotScreen()),
+          _fadeRoute('/buildings', 'buildings', const BuildingsScreen()),
+          _fadeRoute('/analytics', 'analytics', const AnalyticsScreen()),
+          _fadeRoute('/insights', 'insights', const InsightsScreen()),
+          _fadeRoute('/alerts', 'alerts', const AlertsScreen()),
+          _fadeRoute('/prediction', 'prediction', const PredictionScreen()),
+          _fadeRoute('/sustainability', 'sustainability', const SustainabilityScreen()),
+          _fadeRoute('/map', 'map', const MapScreen()),
+          _fadeRoute('/reports', 'reports', const ReportsScreen()),
+          _fadeRoute('/about', 'about', const AboutScreen()),
+          _fadeRoute('/settings', 'settings', const SettingsScreen()),
+          _fadeRoute('/profile', 'profile', const ProfileScreen()),
+          _fadeRoute('/notifications', 'notifications', const NotificationsScreen()),
+        ],
+      ),
+    ],
+  );
+});
 
 GoRoute _fadeRoute(String path, String name, Widget child) {
   return GoRoute(
@@ -92,8 +112,9 @@ class AppRouter extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
     return MaterialApp.router(
-      routerConfig: appRouter,
+      routerConfig: router,
       title: 'Smart Campus',
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,

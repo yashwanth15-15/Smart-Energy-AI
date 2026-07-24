@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from app.database import SessionLocal
@@ -6,13 +7,14 @@ from app.models import Building, EnergyReading
 from app.schemas.dashboard import DashboardResponse, Recommendation
 
 from app.services.scenario_manager import get_current_scenario
+from app.core.auth import get_current_user
 
 router = APIRouter(
     prefix="/dashboard",
     tags=["Dashboard"]
 )
 
-@router.get("", response_model=DashboardResponse)
+@router.get("", response_model=DashboardResponse, dependencies=[Depends(get_current_user)])
 def get_dashboard():
     db: Session = SessionLocal()
     try:

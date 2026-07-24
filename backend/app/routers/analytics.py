@@ -7,6 +7,8 @@ from app.schemas.analytics import AnalyticsResponse
 
 from app.services.scenario_manager import get_current_scenario
 from cachetools import cached, TTLCache
+from fastapi import APIRouter, Depends
+from app.core.auth import get_current_user
 
 analytics_cache = TTLCache(maxsize=100, ttl=60)
 
@@ -15,7 +17,7 @@ router = APIRouter(
     tags=["Analytics"]
 )
 
-@router.get("", response_model=AnalyticsResponse)
+@router.get("", response_model=AnalyticsResponse, dependencies=[Depends(get_current_user)])
 @cached(cache=analytics_cache)
 def get_analytics():
     db: Session = SessionLocal()
