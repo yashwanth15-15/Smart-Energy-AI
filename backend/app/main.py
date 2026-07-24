@@ -31,17 +31,23 @@ async def lifespan(app: FastAPI):
         db.close()
     
     # Load ML Model
-    model_path = os.path.join(os.path.dirname(__file__), "..", "model.pkl")
-    if os.path.exists(model_path):
-        with open(model_path, "rb") as f:
-            app.state.model = pickle.load(f)
-    else:
-        app.state.model = None
-        print("Warning: model.pkl not found. Predictions will fail.")
-    
-    start_background_task()
-    yield
+    try:
+        from pathlib import Path
 
+        # backend/app/main.py -> backend/model.pkl
+        model_path = Path(__file__).resolve().parent.parent / "model.pkl"
+
+        if model_path.exists():
+            with open(model_path, "rb") as f:
+                app.state.model = pickle.load(f)
+            print(f"✅ Model loaded from: {model_path}")
+        else:
+            app.state.model = None
+            print(f"❌ model.pkl not found at: {model_path}")
+
+    except Exception as e:
+        app.state.model = None
+        print(f"❌ Error loading model: {e}")
 app = FastAPI(
     title="Smart Energy AI Backend",
     description="Production-ready FastAPI backend for Smart Energy AI",
