@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1008549395676",
+    "project_id": "smart-energy-ai-3ff26",
+    "storage_bucket": "smart-energy-ai-3ff26.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008549395676:android:bef415eda2ba3077520819",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008549395676-q9uda6v4fra8rml4psvcd8c11rigk6gs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_YT1CQgAiCIUDMva1TQuq6Db9HNmiLWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008549395676-q9uda6v4fra8rml4psvcd8c11rigk6gs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

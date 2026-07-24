@@ -1,16 +1,1 @@
-{
-  "hosting": {
-    "public": "build/web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
+{"hosting":{"public":"build/web","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]},"flutter":{"platforms":{"android":{"default":{"projectId":"smart-energy-ai-3ff26","appId":"1:1008549395676:android:bef415eda2ba3077520819","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"smart-energy-ai-3ff26","configurations":{"android":"1:1008549395676:android:bef415eda2ba3077520819","ios":"1:1008549395676:ios:e6e20076c11dd6b1520819","macos":"1:1008549395676:ios:e6e20076c11dd6b1520819","web":"1:1008549395676:web:704de826bdfa1b11520819","windows":"1:1008549395676:web:347d27f626f37f3d520819"}}}}}}

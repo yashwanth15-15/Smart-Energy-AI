@@ -25,15 +25,33 @@ class ApiClient {
     };
     
     final user = FirebaseAuth.instance.currentUser;
+    print('AUTH DEBUG: FirebaseAuth.instance.currentUser is ${user == null ? "null" : "NOT null"}');
     if (user != null) {
+      print('AUTH DEBUG: currentUser.uid = ${user.uid}');
       try {
+        print('AUTH DEBUG: Attempting user.getIdToken(false)');
         final idToken = await user.getIdToken();
+        print('AUTH DEBUG: getIdToken(false) succeeded. Token length: ${idToken?.length}');
         if (idToken != null) {
           headers['Authorization'] = 'Bearer $idToken';
         }
-      } catch (_) {
-        // Ignore error
+      } catch (e) {
+        print('AUTH DEBUG: getIdToken(false) threw exception!');
+        print('AUTH DEBUG: Exception type: ${e.runtimeType}');
+        print('AUTH DEBUG: Exception message: $e');
+        
+        try {
+          print('AUTH DEBUG: Attempting user.getIdToken(true) [forceRefresh]');
+          final forceToken = await user.getIdToken(true);
+          print('AUTH DEBUG: forceRefresh=true succeeded. Token length: ${forceToken?.length}');
+        } catch (forceErr) {
+          print('AUTH DEBUG: forceRefresh=true also threw exception: $forceErr');
+        }
+        
+        throw ApiException('Failed to retrieve authentication token: $e', statusCode: 401);
       }
+    } else {
+      print('AUTH DEBUG: user is null, proceeding without Authorization header');
     }
     
     return headers;
