@@ -6,13 +6,10 @@ import '../features/home/models/prediction_model.dart';
 
 class DashboardService {
   String get baseUrl {
-    if (kIsWeb) {
-      return 'http://localhost:8000';
-    }
-    // Android emulator alias for host loopback, otherwise fallback to localhost
-    return defaultTargetPlatform == TargetPlatform.android 
-        ? 'http://10.0.2.2:8000' 
-        : 'http://localhost:8000';
+    return const String.fromEnvironment(
+      'API_URL',
+      defaultValue: 'http://127.0.0.1:8000',
+    );
   }
 
   Future<DashboardModel> fetchDashboard() async {

@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestRegressor
+import xgboost as xgb
 import pickle
 
 def generate_data(filepath="data/energy_data.csv"):
@@ -11,15 +11,15 @@ def generate_data(filepath="data/energy_data.csv"):
     dates = pd.date_range(start="2026-01-01", periods=1000, freq="h")
     
     temp = np.random.normal(25, 5, 1000)
-    humidity = np.random.normal(55, 10, 1000)
+    occupancy = np.random.uniform(0.1, 1.0, 1000)
     hvac = np.random.choice([0, 1], 1000, p=[0.4, 0.6])
     
-    usage = 100 + (temp - 25)**2 * 0.5 + hvac * 50 + np.random.normal(0, 5, 1000)
+    usage = 100 + (temp - 25)**2 * 0.5 + hvac * 50 + occupancy * 30 + np.random.normal(0, 5, 1000)
     
     df = pd.DataFrame({
         "timestamp": dates,
         "temperature": temp,
-        "humidity": humidity,
+        "occupancy": occupancy,
         "hvac_status": hvac,
         "energy_usage": usage
     })
@@ -29,10 +29,10 @@ def generate_data(filepath="data/energy_data.csv"):
     return df
 
 def train_model(df, model_path="model.pkl"):
-    X = df[["temperature", "humidity", "hvac_status"]]
+    X = df[["temperature", "occupancy", "hvac_status"]]
     y = df["energy_usage"]
     
-    model = RandomForestRegressor(n_estimators=50, random_state=42)
+    model = xgb.XGBRegressor(n_estimators=100, learning_rate=0.1, random_state=42)
     model.fit(X, y)
     
     with open(model_path, "wb") as f:

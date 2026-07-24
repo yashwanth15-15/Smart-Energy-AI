@@ -1,0 +1,21 @@
+databases:
+  - name: smart-energy-db
+    databaseName: smart_energy
+    user: smart_energy_user
+    plan: free
+
+services:
+  - type: web
+    name: smart-energy-backend
+    env: python
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && gunicorn app.main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: smart-energy-db
+          property: connectionString
+      - key: CORS_ORIGINS
+        value: https://your-firebase-app.web.app

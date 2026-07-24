@@ -10,7 +10,10 @@ import 'package:frontend/models/prediction_model.dart';
 import 'package:frontend/models/timeline_model.dart';
 
 class DashboardRepository {
-  final String baseUrl = 'http://127.0.0.1:8000'; // adjust if needed
+  final String baseUrl = const String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'http://127.0.0.1:8000',
+  );
 
   Future<DashboardData> fetchDashboard() async {
     final response = await http.get(Uri.parse('$baseUrl/dashboard'));

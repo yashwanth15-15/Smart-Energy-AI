@@ -21,6 +21,7 @@ build/
 # Environment
 .env
 .env.*
+backend/smart_energy.db
 
 # Logs
 *.log

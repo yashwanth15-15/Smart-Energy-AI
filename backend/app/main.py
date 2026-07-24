@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
+import pickle
+import os
 
 from app.routers import dashboard, prediction, buildings, analytics, alerts, insights, sustainability, timeline
 from app.services.simulator import start_background_task
 from app.database import engine, SessionLocal
 from app.models import Base, Building
+from app.config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -27,6 +30,15 @@ async def lifespan(app: FastAPI):
     finally:
         db.close()
     
+    # Load ML Model
+    model_path = os.path.join(os.path.dirname(__file__), "..", "model.pkl")
+    if os.path.exists(model_path):
+        with open(model_path, "rb") as f:
+            app.state.model = pickle.load(f)
+    else:
+        app.state.model = None
+        print("Warning: model.pkl not found. Predictions will fail.")
+    
     start_background_task()
     yield
 
@@ -38,9 +50,11 @@ app = FastAPI(
 )
 
 # CORS Configuration
+origins = [origin.strip() for origin in settings.cors_origins.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -63,5 +77,6 @@ def read_root():
 def health_check():
     return {
         "status": "ok",
-        "service": "Smart Energy AI Backend"
+        "service": "Smart Energy AI Backend",
+        "model_loaded": app.state.model is not None
     }

@@ -5,3 +5,7 @@ scikit-learn
 pandas
 pydantic
 sqlalchemy
+xgboost
+gunicorn
+python-dotenv
+pydantic-settings
