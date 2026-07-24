@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:frontend/models/dashboard_model.dart';
 import 'package:frontend/models/building_status.dart';
 import 'package:frontend/models/insight_model.dart';
@@ -8,80 +5,41 @@ import 'package:frontend/models/alert_model.dart';
 import 'package:frontend/models/analytics_model.dart';
 import 'package:frontend/models/prediction_model.dart';
 import 'package:frontend/models/timeline_model.dart';
+import 'package:frontend/core/network/api_client.dart';
 
 class DashboardRepository {
-  final String baseUrl = const String.fromEnvironment(
-    'API_URL',
-    defaultValue: 'http://localhost:8000',
-  );
-
   Future<DashboardData> fetchDashboard() async {
-    final response = await http.get(Uri.parse('$baseUrl/dashboard'));
-    if (response.statusCode == 200) {
-      debugPrint('RAW JSON [/dashboard]: ${response.body}');
-      final json = jsonDecode(response.body);
-      return DashboardData.fromJson(json);
-    }
-    throw Exception('Failed to load dashboard');
+    final response = await ApiClient.get('/dashboard');
+    return DashboardData.fromJson(response);
   }
 
   Future<List<BuildingStatus>> fetchBuildings() async {
-    final response = await http.get(Uri.parse('$baseUrl/buildings'));
-    if (response.statusCode == 200) {
-      debugPrint('RAW JSON [/buildings]: ${response.body}');
-      final List<dynamic> jsonList = jsonDecode(response.body);
-      return jsonList.map((e) => BuildingStatus.fromJson(e)).toList();
-    }
-    throw Exception('Failed to load buildings');
+    final response = await ApiClient.get('/buildings');
+    return (response as List).map((e) => BuildingStatus.fromJson(e)).toList();
   }
 
   Future<InsightData> fetchInsights() async {
-    final response = await http.get(Uri.parse('$baseUrl/insights'));
-    if (response.statusCode == 200) {
-      debugPrint('RAW JSON [/insights]: ${response.body}');
-      final json = jsonDecode(response.body);
-      return InsightData.fromJson(json);
-    }
-    throw Exception('Failed to load insights');
+    final response = await ApiClient.get('/insights');
+    return InsightData.fromJson(response);
   }
 
   Future<List<AlertData>> fetchAlerts() async {
-    final response = await http.get(Uri.parse('$baseUrl/alerts'));
-    if (response.statusCode == 200) {
-      debugPrint('RAW JSON [/alerts]: ${response.body}');
-      final List<dynamic> jsonList = jsonDecode(response.body);
-      return jsonList.map((e) => AlertData.fromJson(e)).toList();
-    }
-    throw Exception('Failed to load alerts');
+    final response = await ApiClient.get('/alerts');
+    return (response as List).map((e) => AlertData.fromJson(e)).toList();
   }
 
   Future<AnalyticsData> fetchAnalytics() async {
-    final response = await http.get(Uri.parse('$baseUrl/analytics'));
-    if (response.statusCode == 200) {
-      debugPrint('RAW JSON [/analytics]: ${response.body}');
-      final json = jsonDecode(response.body);
-      return AnalyticsData.fromJson(json);
-    }
-    throw Exception('Failed to load analytics');
+    final response = await ApiClient.get('/analytics');
+    return AnalyticsData.fromJson(response);
   }
 
   Future<PredictionData> fetchPrediction() async {
-    final response = await http.get(Uri.parse('$baseUrl/prediction'));
-    if (response.statusCode == 200) {
-      debugPrint('RAW JSON [/prediction]: ${response.body}');
-      final json = jsonDecode(response.body);
-      return PredictionData.fromJson(json);
-    }
-    throw Exception('Failed to load prediction');
+    final response = await ApiClient.get('/prediction');
+    return PredictionData.fromJson(response);
   }
 
   Future<TimelineData> fetchTimeline() async {
-    final response = await http.get(Uri.parse('$baseUrl/timeline'));
-    if (response.statusCode == 200) {
-      debugPrint('RAW JSON [/timeline]: ${response.body}');
-      final json = jsonDecode(response.body);
-      return TimelineData.fromJson(json);
-    }
-    throw Exception('Failed to load timeline');
+    final response = await ApiClient.get('/timeline');
+    return TimelineData.fromJson(response);
   }
 }

@@ -41,7 +41,7 @@ Smart Energy AI is a full-stack platform designed to predict and monitor energy 
 ### Frontend
 1. `cd frontend`
 2. `flutter pub get`
-3. `flutter run -d chrome --dart-define=API_URL=http://127.0.0.1:8000`
+4. `flutter run -d chrome --dart-define=API_URL=http://localhost:8000`
 
 ## Deployment
 
@@ -58,9 +58,10 @@ This repository is configured for one-click deployment on Render.
 3. Build the frontend for production:
    ```bash
    cd frontend
-   flutter build web --release --dart-define=API_URL=https://your-render-app.onrender.com
+   flutter build web --release
    ```
-4. Deploy using `firebase deploy --only hosting`.
+   *(Note: The production build automatically defaults to `https://smart-energy-ai-ivwu.onrender.com`. If deploying to a different backend, you can override this with `--dart-define=API_URL=...`)*
+4. Deploy using `firebase deploy --only hosting` or upload the `build/web/` folder to Vercel/Netlify.
 
 ## API Documentation
 Once the backend is running locally, visit `http://127.0.0.1:8000/docs` to view the interactive Swagger API documentation.
