@@ -1,3 +1,17 @@
+class DataPoint {
+  final String timestamp;
+  final double value;
+  
+  DataPoint({required this.timestamp, required this.value});
+  
+  factory DataPoint.fromJson(Map<String, dynamic> json) {
+    return DataPoint(
+      timestamp: json['timestamp'] as String,
+      value: (json['value'] as num).toDouble(),
+    );
+  }
+}
+
 class AnalyticsData {
   final double todayTotalEnergy;
   final double weeklyTotalEnergy;
@@ -8,6 +22,8 @@ class AnalyticsData {
   final String highestConsumingBuilding;
   final String lowestConsumingBuilding;
   final int totalActiveAlerts;
+  final List<DataPoint> energyTrend;
+  final List<DataPoint> carbonTrend;
 
   AnalyticsData({
     required this.todayTotalEnergy,
@@ -19,6 +35,8 @@ class AnalyticsData {
     required this.highestConsumingBuilding,
     required this.lowestConsumingBuilding,
     required this.totalActiveAlerts,
+    this.energyTrend = const [],
+    this.carbonTrend = const [],
   });
 
   factory AnalyticsData.fromJson(Map<String, dynamic> json) {
@@ -32,6 +50,8 @@ class AnalyticsData {
       highestConsumingBuilding: json['highestConsumingBuilding']?.toString() ?? 'Unknown',
       lowestConsumingBuilding: json['lowestConsumingBuilding']?.toString() ?? 'Unknown',
       totalActiveAlerts: (json['totalActiveAlerts'] as num?)?.toInt() ?? 0,
+      energyTrend: (json['energyTrend'] as List<dynamic>?)?.map((e) => DataPoint.fromJson(e as Map<String, dynamic>)).toList() ?? [],
+      carbonTrend: (json['carbonTrend'] as List<dynamic>?)?.map((e) => DataPoint.fromJson(e as Map<String, dynamic>)).toList() ?? [],
     );
   }
 
