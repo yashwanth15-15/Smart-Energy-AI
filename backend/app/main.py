@@ -57,6 +57,13 @@ app = FastAPI(
 
 # CORS Configuration
 origins = [origin.strip() for origin in settings.cors_origins.split(",")]
+firebase_origins = [
+    "https://smart-energy-ai-3ff26.web.app",
+    "https://smart-energy-ai-3ff26.firebaseapp.com"
+]
+for fo in firebase_origins:
+    if fo not in origins:
+        origins.append(fo)
 
 app.add_middleware(
     CORSMiddleware,
