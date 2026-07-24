@@ -48,6 +48,8 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         app.state.model = None
         print(f"❌ Error loading model: {e}")
+    
+    yield
 app = FastAPI(
     title="Smart Energy AI Backend",
     description="Production-ready FastAPI backend for Smart Energy AI",
