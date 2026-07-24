@@ -6,6 +6,12 @@ __pycache__/
 *.pyo
 *.pyd
 
+# Firebase
+.firebase/
+.firebaserc
+build /
+build\ /r
+
 # Flutter
 .dart_tool/
 build/

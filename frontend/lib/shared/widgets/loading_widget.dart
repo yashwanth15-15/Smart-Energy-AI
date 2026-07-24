@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:frontend/shared/widgets/shimmer_loader.dart';
+import 'package:frontend/shared/widgets/skeleton_loader.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({super.key});
@@ -12,11 +11,11 @@ class LoadingWidget extends StatelessWidget {
         padding: EdgeInsets.all(24.0),
         child: Column(
           children: [
-            ShimmerLoader(height: 120, width: double.infinity),
+            SkeletonLoader(height: 120, width: double.infinity),
             SizedBox(height: 16),
-            ShimmerLoader(height: 250, width: double.infinity),
+            CardSkeleton(),
             SizedBox(height: 16),
-            ShimmerLoader(height: 250, width: double.infinity),
+            CardSkeleton(),
           ],
         ),
       ),
