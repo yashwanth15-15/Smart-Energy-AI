@@ -1,0 +1,34 @@
+# Python
+backend/.venv/
+backend/__pycache__/
+*.pyc
+
+# Flutter
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# VS Code
+.vscode/
+
+# IntelliJ
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Environment
+.env
+.env.*
+
+# Python cache
+__pycache__/
+*.pyo
+*.pyd
+
+# Logs
+*.log
