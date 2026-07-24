@@ -9,6 +9,7 @@ import 'package:frontend/shared/widgets/loading_widget.dart';
 import 'package:frontend/shared/widgets/error_display.dart';
 import 'package:frontend/shared/widgets/section_header.dart';
 import 'package:frontend/shared/widgets/operational_timeline.dart';
+import 'package:frontend/shared/widgets/chat_widget.dart';
 
 class CopilotData {
   final DashboardData dashboard;
@@ -48,26 +49,45 @@ class AiCopilotScreen extends ConsumerWidget {
       body: RefreshIndicator(
         onRefresh: () async => ref.invalidate(copilotProvider),
         child: asyncData.when(
-          data: (data) => SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(context),
-                const SizedBox(height: 16),
-                _CampusSummaryCard(data: data),
-                const SizedBox(height: 16),
-                _RiskAssessment(data: data),
-                const SizedBox(height: 16),
-                const OperationalTimeline(maxEvents: 5),
-                const SizedBox(height: 16),
-                _ExecutiveBriefing(data: data),
-                const SizedBox(height: 16),
-                _PredictionSummary(data: data),
-                const SizedBox(height: 24),
-              ],
-            ),
+          data: (data) => LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth > 900) {
+                // Desktop Split Layout
+                return Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 6,
+                        child: SingleChildScrollView(
+                          child: _buildDashboardContent(context, data),
+                        ),
+                      ),
+                      const SizedBox(width: 24),
+                      const Expanded(
+                        flex: 4,
+                        child: ChatWidget(),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                // Mobile/Tablet Layout
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      _buildDashboardContent(context, data),
+                      const SizedBox(height: 24),
+                      const SectionHeader(title: 'Ask AI Copilot'),
+                      const SizedBox(height: 16),
+                      const SizedBox(height: 600, child: ChatWidget()),
+                    ],
+                  ),
+                );
+              }
+            }
           ),
           loading: () => const LoadingWidget(),
           error: (e, _) => ErrorDisplay(message: e.toString()),
@@ -76,19 +96,29 @@ class AiCopilotScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildDashboardContent(BuildContext context, CopilotData data) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            const Icon(Icons.psychology, size: 48, color: Color(0xFF2E7D32)),
+            Icon(Icons.psychology, size: 48, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 16),
             Text('AI Campus Copilot', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
           ],
         ),
         const SizedBox(height: 8),
         Text('Real-time AI analysis of Smart Energy Campus', style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey[700])),
+        const SizedBox(height: 24),
+        _CampusSummaryCard(data: data),
+        const SizedBox(height: 16),
+        _RiskAssessment(data: data),
+        const SizedBox(height: 16),
+        const OperationalTimeline(maxEvents: 3),
+        const SizedBox(height: 16),
+        _ExecutiveBriefing(data: data),
+        const SizedBox(height: 16),
+        _PredictionSummary(data: data),
       ],
     );
   }
@@ -101,33 +131,25 @@ class _CampusSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
-      shadowColor: Colors.black12,
+      elevation: 0,
+      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-            colors: [Colors.green.shade50, Colors.white],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        padding: const EdgeInsets.all(16),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(Icons.auto_awesome, color: Colors.green[700], size: 28),
+                Icon(Icons.auto_awesome, color: Theme.of(context).colorScheme.primary, size: 28),
                 const SizedBox(width: 12),
-                Text('Current Operational Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green[900])),
+                Text('Current Operational Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
               ],
             ),
             const SizedBox(height: 12),
             Text(
               data.insight.summary,
-              style: const TextStyle(fontSize: 16, height: 1.5, color: Colors.black87),
+              style: TextStyle(fontSize: 16, height: 1.5, color: Theme.of(context).colorScheme.onSurface),
             ),
           ],
         ),
@@ -191,10 +213,10 @@ class _RiskChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 180,
+      width: 160,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withValues(alpha: 0.3)),
         boxShadow: [BoxShadow(color: color.withValues(alpha: 0.05), blurRadius: 8)],
@@ -205,7 +227,7 @@ class _RiskChip extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: const TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
+              Expanded(child: Text(title, style: const TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis)),
               Icon(Icons.circle, color: color, size: 12),
             ],
           ),
@@ -238,9 +260,10 @@ class _ExecutiveBriefing extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SectionHeader(title: 'Executive Operational Briefing'),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         Card(
-          elevation: 2,
+          elevation: 0,
+          color: Theme.of(context).cardColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -253,8 +276,9 @@ class _ExecutiveBriefing extends StatelessWidget {
                 const Divider(height: 32),
                 const Text('EXPECTED RESULT', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey, letterSpacing: 1.0)),
                 const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Wrap(
+                  spacing: 24,
+                  runSpacing: 16,
                   children: [
                     _buildResultItem('Daily Savings', insight.expectedSavingsKwh),
                     _buildResultItem('Cost Reduction', insight.expectedCostReduction),
@@ -292,7 +316,7 @@ class _ExecutiveBriefing extends StatelessWidget {
       children: [
         Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
         const SizedBox(height: 4),
-        Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: color ?? Colors.black87)),
+        Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: color)),
       ],
     );
   }
@@ -310,17 +334,17 @@ class _PredictionSummary extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SectionHeader(title: 'Forward Outlook'),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         LayoutBuilder(
           builder: (context, constraints) {
-            final isDesktop = constraints.maxWidth > 600;
+            final isDesktop = constraints.maxWidth > 500;
             return GridView.count(
-              crossAxisCount: isDesktop ? 4 : 2,
+              crossAxisCount: isDesktop ? 2 : 1,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 2.0,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
+              childAspectRatio: 3.0,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
               children: [
                 _OutlookCard(title: 'Predicted Usage', value: '${pred.predictedEnergyUsage} kWh', icon: Icons.trending_up),
                 _OutlookCard(title: 'Peak Demand', value: pred.peakDemandHour, icon: Icons.access_time),
@@ -345,15 +369,15 @@ class _OutlookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.blueGrey, size: 24),
+          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 import pickle
 import os
 
-from app.routers import dashboard, prediction, buildings, analytics, alerts, insights, sustainability, timeline
+from app.routers import dashboard, prediction, buildings, analytics, alerts, insights, sustainability, timeline, copilot
 from app.services.simulator import start_background_task
 from app.database import engine, SessionLocal
 from app.models import Base, Building
@@ -84,6 +84,7 @@ app.include_router(alerts.router)
 app.include_router(insights.router)
 app.include_router(sustainability.router)
 app.include_router(timeline.router)
+app.include_router(copilot.router)
 
 @app.get("/")
 def read_root():
