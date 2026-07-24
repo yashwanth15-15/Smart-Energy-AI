@@ -5,7 +5,7 @@ from firebase_admin import auth
 
 # Initialize firebase admin if not already initialized
 if not firebase_admin._apps:
-    firebase_admin.initialize_app()
+    firebase_admin.initialize_app(options={"projectId": "smart-energy-ai-3ff26"})
 
 security = HTTPBearer()
 

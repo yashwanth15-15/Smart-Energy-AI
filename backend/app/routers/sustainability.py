@@ -2,12 +2,15 @@ from fastapi import APIRouter
 from app.schemas.sustainability import SustainabilityResponse, EnvironmentalMetrics, SocialMetrics, GovernanceMetrics
 from app.services.scenario_manager import get_current_scenario
 
+from app.core.auth import get_current_user
+from fastapi import APIRouter, Depends
+
 router = APIRouter(
     prefix="/sustainability",
     tags=["Sustainability"]
 )
 
-@router.get("", response_model=SustainabilityResponse)
+@router.get("", response_model=SustainabilityResponse, dependencies=[Depends(get_current_user)])
 def get_sustainability_metrics():
     scenario = get_current_scenario()
     

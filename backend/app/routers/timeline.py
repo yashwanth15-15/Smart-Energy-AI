@@ -4,12 +4,15 @@ from app.schemas.timeline import TimelineResponse, TimelineEvent
 from app.services.scenario_manager import get_current_scenario
 import uuid
 
+from app.core.auth import get_current_user
+from fastapi import APIRouter, Depends
+
 router = APIRouter(
     prefix="/timeline",
     tags=["Timeline"]
 )
 
-@router.get("", response_model=TimelineResponse)
+@router.get("", response_model=TimelineResponse, dependencies=[Depends(get_current_user)])
 def get_timeline():
     scenario = get_current_scenario()
     now = datetime.utcnow()

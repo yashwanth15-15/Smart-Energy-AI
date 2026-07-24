@@ -8,12 +8,15 @@ from app.schemas.alerts import AlertResponse
 
 from app.services.scenario_manager import get_current_scenario
 
+from app.core.auth import get_current_user
+from fastapi import APIRouter, Depends
+
 router = APIRouter(
     prefix="/alerts",
     tags=["Alerts"]
 )
 
-@router.get("", response_model=List[AlertResponse])
+@router.get("", response_model=List[AlertResponse], dependencies=[Depends(get_current_user)])
 def get_alerts():
     db: Session = SessionLocal()
     try:

@@ -8,12 +8,15 @@ from app.models import Building
 from app.schemas.prediction import PredictionResponse, PredictionPoint
 from app.services.scenario_manager import get_current_scenario
 
+from app.core.auth import get_current_user
+from fastapi import APIRouter, Request, HTTPException, Depends
+
 router = APIRouter(
     prefix="/prediction",
     tags=["Prediction"]
 )
 
-@router.get("", response_model=PredictionResponse)
+@router.get("", response_model=PredictionResponse, dependencies=[Depends(get_current_user)])
 def get_prediction(request: Request, temperature: float = 25.0, occupancy: float = 0.5, hvac_status: int = 1):
     db: Session = SessionLocal()
     try:

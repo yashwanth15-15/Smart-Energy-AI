@@ -1,16 +1,18 @@
 from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
 from app.database import SessionLocal
 from app.models import Building, EnergyReading
 from app.schemas.building import BuildingStatus
+from app.core.auth import get_current_user
 
 router = APIRouter(
     prefix="/buildings",
     tags=["Buildings"]
 )
 
-@router.get("", response_model=List[BuildingStatus])
+@router.get("", response_model=List[BuildingStatus], dependencies=[Depends(get_current_user)])
 def get_buildings():
     """Return the latest status for each building.
     Status logic (simple example):
