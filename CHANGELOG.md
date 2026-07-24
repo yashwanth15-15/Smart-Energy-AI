@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added professional skeleton loaders for asynchronous operations.
   - Added custom generic empty states.
   - Added core application pages: Profile, Settings, Notifications.
+- **Phase 7: CI/CD & Monitoring**
+  - Added GitHub Actions workflow to automatically build and deploy the Flutter Web frontend to Firebase Hosting on pushes to `main`.
 - **Phase 6: Authentication & Security**
   - Integrated Firebase Authentication into the Flutter Frontend (Login Screen, Riverpod Auth State Provider).
   - Configured GoRouter to intercept route access and seamlessly redirect unauthenticated traffic.
