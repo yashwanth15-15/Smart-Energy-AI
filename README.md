@@ -366,23 +366,11 @@ Supports:
 
 ---
 
-# 🎥 Demo
+## 🚀 Project Resources
 
-## Live Application
-
-https://YOUR-LIVE-LINK
-
----
-
-## Demo Video
-
-https://YOUR-YOUTUBE-LINK
-
----
-
-## Presentation
-
-https://YOUR-PRESENTATION-LINK
+- 🌐 **Live Demo:** https://smart-energy-ai-3ff26.web.app/
+- 📑 **Presentation:** https://1drv.ms/p/c/18970036b224ad1a/IQCPHAUJrBlFQJ9BBn_OZnTRASgNBbGtt1i-H73mZfC_CWA?e=HYRCDz
+- 📹 **Demo Video:** https://drive.google.com/file/d/1Fjqd19_XaV6xcKn2pNDgqb9DWgOzALvA/view?usp=sharing
 
 ---
 
@@ -424,7 +412,7 @@ GitHub:
 https://github.com/yashwanth15-15
 
 LinkedIn:
-https://www.linkedin.com/in/YOUR-LINKEDIN
+https://www.linkedin.com/in/yashwanth-bankapalli-475838263
 
 ---
 
