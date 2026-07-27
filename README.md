@@ -368,9 +368,9 @@ Supports:
 
 ## 🚀 Project Resources
 
-- 🌐 **Live Demo:** https://smart-energy-ai-3ff26.web.app/
-- 📑 **Presentation:** https://1drv.ms/p/c/18970036b224ad1a/IQCPHAUJrBlFQJ9BBn_OZnTRASgNBbGtt1i-H73mZfC_CWA?e=HYRCDz
-- 📹 **Demo Video:** https://drive.google.com/file/d/1Fjqd19_XaV6xcKn2pNDgqb9DWgOzALvA/view?usp=sharing
+- 🌐 **Live Application:** [Open Smart Energy AI](https://smart-energy-ai-3ff26.web.app/)
+- 📑 **Presentation:** [View Presentation](https://1drv.ms/p/c/18970036b224ad1a/IQCPHAUJrBlFQJ9BBn_OZnTRASgNBbGtt1i-H73mZfC_CWA?e=HYRCDz)
+- 📹 **Project Demo:** [Watch Demo](https://drive.google.com/file/d/1Fjqd19_XaV6xcKn2pNDgqb9DWgOzALvA/view?usp=sharing)
 
 ---
 
